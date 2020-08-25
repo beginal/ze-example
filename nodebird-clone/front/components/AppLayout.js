@@ -1,19 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Col, Row } from 'antd';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
-import styled from 'styled-components';
-
 
 const MenuSearch = styled(Input.Search)`
   vertical-align:middle;
 `;
 
 const AppLayout = ({ children }) => {
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn } = useSelector(state => state.users)
+  // reducer의 state값을 가져온다.
 
   return (
     <>
@@ -36,9 +36,7 @@ const AppLayout = ({ children }) => {
       {children}
         </Col>
         <Col xs={24} md={6}>
-          {isLoggedIn 
-          ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> 
-          : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+          {isLoggedIn ? <UserProfile/> : <LoginForm/>}
         </Col>
       </Row>
     </>
