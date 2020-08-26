@@ -1,14 +1,16 @@
 import React, { useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { Card, Popover, Button, Avatar } from 'antd';
+import { Card, Popover, Button, Avatar, List, Comment } from 'antd';
 import PropTypes from 'prop-types';
 import PostImage from '../components/PostImage';
+import PostCardContent from '../components/PostCardContent';
+import CommentForm from '../components/CommentForm';
 import {
   RetweetOutlined,
   HeartOutlined,
   HeartTwoTone,
   MessageOutlined,
-  EllipsisOutlined
+  EllipsisOutlined,
 
 } from '@ant-design/icons';
 
@@ -54,12 +56,29 @@ const PostCard = ({post}) => {
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
-          description={post.content}
+          description={<PostCardContent postData={post.content} />}
+          // post의 해시태그를 인식하기 위해 컴포넌트 분리
         />
       </Card>
       {openedComment && (
         <div>
-          댓글 부분
+          <List 
+            header={`${post.Comments.length}개의 댓글`}
+            itemLayout="horizontal"
+            dataSource={post.Comments}
+            renderItem={item => (
+              <Comment 
+                author={item.nickname}
+                avatar={<Avatar>{item.nickname[0]}</Avatar>}
+                content={item.content}
+                actions={[
+                  <Button key="comments">덧글</Button>,
+                  <Button key="warning">신고</Button>,
+                ]}
+              />
+            )}
+          />
+          <CommentForm post={post} />
         </div>
       )}
     </div>
@@ -70,7 +89,7 @@ PostCard.propTypes = {
   post: PropTypes.shape({
     id: PropTypes.number,
     User: PropTypes.object,
-    content: PropTypes.object,
+    content: PropTypes.string,
     Images: PropTypes.arrayOf(PropTypes.object),
     Comments: PropTypes.arrayOf(PropTypes.object)
   })

@@ -49,9 +49,14 @@ const dummyData = {
 }
 
 const ADD_POST = 'ADD_POST';
+const ADD_COMMENT = 'ADD_COMMENT';
 
 export const addedPosted = {
   type: ADD_POST
+}
+
+export const addedCommented = {
+  type: ADD_COMMENT
 }
 
 const PostReducer = (state = initialState, action) => {
@@ -59,6 +64,10 @@ const PostReducer = (state = initialState, action) => {
     case ADD_POST:
       return {
         mainPosts: [dummyData, ...state.mainPosts]
+      }
+    case ADD_COMMENT:
+      return {
+        ...state
       }
     default:
       return state;
