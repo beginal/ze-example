@@ -1,44 +1,151 @@
 export const initialState = {
-  isLoggedIn: false,
+  logInLoading: false,
+  logInDone: false,
+  lodInError: null,
+  logOutLoading: false,
+  logOutDone: false,
+  lodOutError: null,
+  signUpLoading: false,
+  signUpDone: false,
+  signUpError: null,
+  changeNicknameLoading: false,
+  changeNicknameDone: false,
+  changeNicknameError: null,
   me: null,
   signUpData: {},
   loginData: {},
-}
+};
 
-const LOG_IN = 'LOG_IN';
-const LOG_OUT = 'LOG_OUT';
+export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
+export const LOG_IN_SUCCESS = 'LOG_IN_FAILURE';
+export const LOG_IN_FAILURE = 'LOG_IN_SUCCESS';
 
-export const LogInAction = data => {
-  return {
-    type: LOG_IN,
-    data
-  }
-} // 넘겨줄 Action
+export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
+export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
+export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
+
+export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
+export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
+export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
+
+export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
+export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS';
+export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
+
+export const FOLLOW_REQUEST = 'FOLLOW_REQUEST';
+export const FOLLOW_SUCCESS = 'FOLLOW_SUCCESS';
+export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
+
+export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
+export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
+export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
+
+export const LogInRequestAction = (data) => ({
+  type: LOG_IN_REQUEST,
+  data,
+}); // 넘겨줄 Action
 // 컴포넌트에서 dispatch(LoginAction(data로 넘겨줄값) 으로 사용)
+// 2. LogInRequestAction은 LOG_IN_REUQEST 액션을 담고
+// data는 id, password 값을 담고있다.
 
-export const LogOutAction = () => {
-  return {
-    type: LOG_OUT
-  }
-}
+export const LogOutRequestAction = () => ({
+  type: LOG_OUT_REQUEST,
+});
 
-const UserReducer = (state = initialState, action) =>{
-  switch(action.type) {
-    case LOG_IN : 
-    return { // LOG_IN ACTION이 감지되면  아래의 행동을 취한다.
-      ...state, // 객체의 불변성을 유지하며 안의 값만 바꾸기 위함
-      isLoggedIn: true,
-      me: action.data
-    }
-    case LOG_OUT : 
-    return {
-      ...state,
-      isLoggedIn: false,
-      me: null
-    }
-    default: 
-    return state;
+const dummyUser = (data) => ({
+  ...data,
+  nickname: 'mememe',
+  id: 1,
+  Posts: [],
+  Followings: [],
+  Followers: [],
+});
+
+const UserReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case LOG_IN_REQUEST:
+      return {
+        ...state,
+        logInLoading: true,
+        logInDone: false,
+        lodInError: null,
+      };
+    case LOG_IN_SUCCESS:
+      return {
+        ...state,
+        logInLoading: false,
+        logInDone: true,
+        me: dummyUser(action.data),
+      };
+    case LOG_IN_FAILURE:
+      return {
+        ...state,
+        logInLoading: false,
+        lodInError: action.error,
+      };
+
+    case LOG_OUT_REQUEST:
+      return {
+        ...state,
+        logOutLoading: true,
+        logOutDone: false,
+        lodOutError: null,
+      };
+    case LOG_OUT_SUCCESS:
+      return {
+        ...state,
+        logOutLoading: false,
+        logOutDone: true,
+        me: null,
+      };
+    case LOG_OUT_FAILURE:
+      return {
+        ...state,
+        logOutLoading: false,
+        lodOutError: action.error,
+      };
+
+    case SIGN_UP_REQUEST:
+      return {
+        ...state,
+        signUpLoading: true,
+        signUpDone: false,
+        signUpError: null,
+      };
+    case SIGN_UP_SUCCESS:
+      return {
+        ...state,
+        signUpLoading: false,
+        signUpDone: false,
+      };
+    case SIGN_UP_FAILURE:
+      return {
+        ...state,
+        signUpLoading: false,
+        signUpError: action.error,
+      };
+    case CHANGE_NICKNAME_REQUEST:
+      return {
+        ...state,
+        changeNicknameLoading: true,
+        changeNicknameDone: false,
+        changeNicknameError: null,
+      };
+    case CHANGE_NICKNAME_SUCCESS:
+      return {
+        ...state,
+        changeNicknameLoading: false,
+        changeNicknameDone: false,
+      };
+    case CHANGE_NICKNAME_FAILURE:
+      return {
+        ...state,
+        changeNicknameLoading: false,
+        changeNicknameError: action.error,
+      };
+    default:
+      return state;
   }
-}
+};
 
 export default UserReducer;

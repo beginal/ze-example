@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Col, Row } from 'antd';
@@ -12,7 +12,7 @@ const MenuSearch = styled(Input.Search)`
 `;
 
 const AppLayout = ({ children }) => {
-  const { isLoggedIn } = useSelector(state => state.users)
+  const { me } = useSelector((state) => state.users);
   // reducer의 state값을 가져온다.
 
   return (
@@ -33,19 +33,19 @@ const AppLayout = ({ children }) => {
           Left
         </Col>
         <Col xs={24} md={12}>
-      {children}
+          {children}
         </Col>
         <Col xs={24} md={6}>
-          {isLoggedIn ? <UserProfile/> : <LoginForm/>}
+          {me ? <UserProfile /> : <LoginForm />}
         </Col>
       </Row>
     </>
 
-  )
-}
+  );
+};
 
 AppLayout.propTypes = {
   children: PropTypes.node.isRequired,
-}
+};
 
 export default AppLayout;

@@ -5,7 +5,7 @@ export const Global = createGlobalStyle`
   .slick-slide {
     display: inline-block;
   }
-`
+`;
 export const ZoomWrap = styled.div`
   position: fixed;
   z-index: 5000;
@@ -13,7 +13,7 @@ export const ZoomWrap = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-`
+`;
 
 export const Header = styled.header`
   height: 44px;
@@ -27,7 +27,7 @@ export const Header = styled.header`
     color: #333;
     line-height: 44px;
   }
-`
+`;
 export const CloseBtn = styled(CloseOutlined)`
   position: absolute;
   right: 0;
@@ -41,7 +41,7 @@ export const SlickWrap = styled.div`
   height: cale(100% - 44px);
   background: #090909;
 
-`
+`;
 
 export const ImageWrap = styled.div`
   padding: 32px;
@@ -51,7 +51,7 @@ export const ImageWrap = styled.div`
     margin: 0 auto;
     max-height: 750px;
   }
-`
+`;
 
 export const Indicator = styled.div`
   text-align: center;

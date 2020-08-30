@@ -2,9 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Card, Popover, Button, Avatar, List, Comment } from 'antd';
 import PropTypes from 'prop-types';
-import PostImage from '../components/PostImage';
-import PostCardContent from '../components/PostCardContent';
-import CommentForm from '../components/CommentForm';
 import {
   RetweetOutlined,
   HeartOutlined,
@@ -13,19 +10,22 @@ import {
   EllipsisOutlined,
 
 } from '@ant-design/icons';
+import PostImage from './PostImage';
+import PostCardContent from './PostCardContent';
+import CommentForm from './CommentForm';
 
-const PostCard = ({post}) => {
+const PostCard = ({ post }) => {
   const [liked, setLiked] = useState(false);
   const [openedComment, setOpenedComment] = useState(false);
 
   const onChangeLiked = useCallback(() => {
-    setLiked(prev => !prev)
-  }, [])
+    setLiked((prev) => !prev);
+  }, []);
   const onToggleComment = useCallback(() => {
-    setOpenedComment(prev => !prev)
-  }, [])
+    setOpenedComment((prev) => !prev);
+  }, []);
 
-  const id  = useSelector(state => state.users.me?.id)
+  const id = useSelector((state) => state.users.me?.id);
 
   return (
     <div>
@@ -33,24 +33,29 @@ const PostCard = ({post}) => {
         cover={post.Images[0] && <PostImage images={post.Images} />}
         actions={[
           <RetweetOutlined key="Retweet" />,
-            liked
+          liked
             ? <HeartTwoTone twoToneColor="#eb2f96" key="Liked_Two" onClick={onChangeLiked} />
             : <HeartOutlined key="Liked" onClick={onChangeLiked} />,
           <MessageOutlined onClick={onToggleComment} key="Message" />,
-          <Popover key="comment" content={(
-            <Button.Group>
-              { 
-              id && id === post.User.id 
-              ? <Button>신고</Button>
-              : <div>
-                <Button>수정</Button>
-                <Button>삭제</Button>
-                </div>
+          <Popover
+            key="comment"
+            content={(
+              <Button.Group>
+                {
+              id && id === post.User.id
+                ? <Button>신고</Button>
+                : (
+                  <div>
+                    <Button>수정</Button>
+                    <Button>삭제</Button>
+                  </div>
+                )
             }
-            </Button.Group>
-          )}>
+              </Button.Group>
+          )}
+          >
             <EllipsisOutlined key="more" />
-          </Popover>
+          </Popover>,
         ]}
       >
         <Card.Meta
@@ -62,14 +67,14 @@ const PostCard = ({post}) => {
       </Card>
       {openedComment && (
         <div>
-          <List 
+          <List
             header={`${post.Comments.length}개의 댓글`}
             itemLayout="horizontal"
             dataSource={post.Comments}
-            renderItem={item => (
-              <Comment 
-                author={item.nickname}
-                avatar={<Avatar>{item.nickname[0]}</Avatar>}
+            renderItem={(item) => (
+              <Comment
+                avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                author={item.User.nickname}
                 content={item.content}
                 actions={[
                   <Button key="comments">덧글</Button>,
@@ -82,8 +87,8 @@ const PostCard = ({post}) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 PostCard.propTypes = {
   post: PropTypes.shape({
@@ -91,8 +96,8 @@ PostCard.propTypes = {
     User: PropTypes.object,
     content: PropTypes.string,
     Images: PropTypes.arrayOf(PropTypes.object),
-    Comments: PropTypes.arrayOf(PropTypes.object)
-  })
-}
+    Comments: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
+};
 
-export default PostCard
+export default PostCard;

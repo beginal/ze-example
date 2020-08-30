@@ -1,38 +1,48 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Input, Form, Button } from 'antd';
+import { ADD_COMMENT_REQUEST } from '../reducer/post';
+import useInput from '../lib/useInput';
 
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
-  const [commentForm , setCommentForm] = useState('');
+  const [commentText, onChangeComment, setCommentText] = useInput('');
 
-  const { isLoggedIn  } = useSelector(state => state.users)
+  const id = useSelector((state) => state.users.me?.id);
+  const { me } = useSelector((state) => state.users);
+  const { addCommentDone } = useSelector((state) => state.posts);
 
-  const onChangeComment = e => {
-    setCommentForm(e.target.value)
-  }
-  const onSubmitComment = () => {
-    dispatch()
-    setCommentForm("")
-  }
+  useEffect(() => {
+    if (addCommentDone) {
+      setCommentText('');
+    }
+  }, [addCommentDone]);
+
+  const onSubmitComment = useCallback(() => {
+    dispatch({
+      type: ADD_COMMENT_REQUEST,
+      data: { content: commentText, postId: post.id, userId: id },
+    });
+  }, [commentText, id]);
 
   return (
     <div>
-      <Form style={{display:'inline'}} onFinish={onSubmitComment}>
-        {isLoggedIn && 
+      <Form style={{ display: 'inline' }} onFinish={onSubmitComment}>
+        {me
+        && (
         <Form.Item>
-        <Input.TextArea value={commentForm} rows={4} onChange={onChangeComment} placeholder="바르고 좋은 댓글문화 만들어요" />
-        <Button type="primary" htmlType="submit">입력</Button>
+          <Input.TextArea value={commentText} rows={4} onChange={onChangeComment} placeholder="바르고 좋은 댓글문화 만들어요" />
+          <Button type="primary" htmlType="submit">입력</Button>
         </Form.Item>
-        }        
+        )}
       </Form>
     </div>
-  )
-}
+  );
+};
 
 CommentForm.propTypes = {
-  post : PropTypes.object.isRequired
-}
+  post: PropTypes.object.isRequired,
+};
 
-export default CommentForm
+export default CommentForm;
