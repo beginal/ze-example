@@ -10,18 +10,22 @@ export const initialState = {
     content: '첫번째 게시물입니다. #블라블라 #헤헤',
     Images: [
       {
+        id: shortId.generate(),
         src: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5358%2F2020%2F05%2F20%2F0000277551_001_20200520101205744.jpg&type=sc960_832',
       },
       {
+        id: shortId.generate(),
         src: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblog_2020_05_24_1051%2F2eaeb192-9d70-11ea-a4a6-48df379cc9e4_03.jpg&type=sc960_832',
       },
       {
+        id: shortId.generate(),
         src: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5277%2F2020%2F05%2F20%2F0000240271_001_20200520212507306.jpg&type=sc960_832',
       },
     ],
     Comments: [{
+      id: shortId.generate(),
       User: {
-        id: 1,
+        id: shortId.generate(),
         nickname: 'Junho',
       },
       content: '좋아용',
@@ -31,35 +35,33 @@ export const initialState = {
   imagePaths: [],
   addPostLoading: false,
   addPostDone: false,
-  addPostError: false,
+  addPostError: null,
+  removePostLoading: false,
+  removePostDone: false,
+  removePostError: null,
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
 };
 
 const dummyData = (data) => ({
-  id: shortId.generate(),
-  content: data,
+  id: data.id,
+  content: data.content,
   User: {
     id: 1,
     nickname: 'Junho',
   },
-  Images: [
-
-  ],
-  Comments: [{
-    User: {
-      id: 1,
-      nickname: 'Junho',
-    },
-    content: '헤헤',
-  },
-  ],
+  Images: [],
+  Comments: [],
 });
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const REMOVE_POST_REQUEST = 'ADD_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'ADD_POST_FAILURE';
 
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMESUCCESSEST';
@@ -105,6 +107,26 @@ const PostReducer = (state = initialState, action) => {
         ...state,
         addPostLoading: false,
         addPostError: action.error,
+      };
+    case REMOVE_POST_REQUEST:
+      return {
+        ...state,
+        removePostLoading: true,
+        removePostDone: false,
+        removePostError: null,
+      };
+    case REMOVE_POST_SUCCESS:
+      return {
+        ...state,
+        mainPosts: state.mainPosts.filter(((v) => v.id === action.data)),
+        removePostLoading: false,
+        removePostDone: true,
+      };
+    case REMOVE_POST_FAILURE:
+      return {
+        ...state,
+        removePostLoading: false,
+        removePostError: action.error,
       };
     case ADD_COMMENT_REQUEST:
       return {

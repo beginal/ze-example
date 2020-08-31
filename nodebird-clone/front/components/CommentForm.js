@@ -11,7 +11,7 @@ const CommentForm = ({ post }) => {
 
   const id = useSelector((state) => state.users.me?.id);
   const { me } = useSelector((state) => state.users);
-  const { addCommentDone } = useSelector((state) => state.posts);
+  const { addCommentDone, addCommentLoading } = useSelector((state) => state.posts);
 
   useEffect(() => {
     if (addCommentDone) {
@@ -33,7 +33,7 @@ const CommentForm = ({ post }) => {
         && (
         <Form.Item>
           <Input.TextArea value={commentText} rows={4} onChange={onChangeComment} placeholder="바르고 좋은 댓글문화 만들어요" />
-          <Button type="primary" htmlType="submit">입력</Button>
+          <Button type="primary" htmlType="submit" loading={addCommentLoading}>입력</Button>
         </Form.Item>
         )}
       </Form>
