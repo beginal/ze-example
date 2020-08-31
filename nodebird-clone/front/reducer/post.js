@@ -59,9 +59,9 @@ export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
-export const REMOVE_POST_REQUEST = 'ADD_POST_REQUEST';
-export const REMOVE_POST_SUCCESS = 'ADD_POST_SUCCESS';
-export const REMOVE_POST_FAILURE = 'ADD_POST_FAILURE';
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMESUCCESSEST';
@@ -118,7 +118,7 @@ const PostReducer = (state = initialState, action) => {
     case REMOVE_POST_SUCCESS:
       return {
         ...state,
-        mainPosts: state.mainPosts.filter(((v) => v.id === action.data)),
+        mainPosts: state.mainPosts.filter(((v) => v.id !== action.data)),
         removePostLoading: false,
         removePostDone: true,
       };
