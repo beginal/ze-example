@@ -1,4 +1,5 @@
 import { all, fork, put, delay, takeLatest, throttle } from 'redux-saga/effects';
+import axios from 'axios';
 import shortId from 'shortid';
 import {
   ADD_POST_REQUEST,
@@ -17,6 +18,10 @@ import {
 } from '../reducer/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducer/user';
 
+function loadPostsAPI(data) {
+  return axios.get('/api/posts', data);
+}
+
 function* loadPosts() {
   try {
     yield delay(1000);
@@ -30,6 +35,10 @@ function* loadPosts() {
       data: err.response.data,
     });
   }
+}
+
+function addPostAPI(data) {
+  return axios.post('/api/post', data);
 }
 
 function* addPost(action) {
@@ -55,6 +64,10 @@ function* addPost(action) {
   }
 }
 
+function removePostAPI(data) {
+  return axios.delete('/api/post', data);
+}
+
 function* removePost(action) {
   try {
     yield delay(1000);
@@ -73,6 +86,10 @@ function* removePost(action) {
       data: err.response.data,
     });
   }
+}
+
+function addCommentAPI(data) {
+  return axios.post(`/api/post/${data.postId}/comment`, data);
 }
 
 function* addComment(action) {
